@@ -279,7 +279,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         return encodedImages;
     }
 
-    private  void  gambar(){
+    private void gambar(){
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAutoZoomEnabled(true)
