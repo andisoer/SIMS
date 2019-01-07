@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/test"
+            android:title="Test"/>
+
+        <item android:id="@+id/test2"
+            android:title="Test 2"/>
+
+    </group>
+
+    <item android:title="Lainnya">
+        <menu>
+            <item android:id="@+id/tes3"
+                android:title="Test 3"/>
+
+            <item android:id="@+id/Logout"
+                android:title="Keluar"/>
+        </menu>
+    </item>
+
+</menu>

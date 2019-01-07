@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingLeft="15dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="5dp"
+    android:background="@color/colorBlueCya">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="86dp"
+        android:layout_height="86dp"
+        android:src="@drawable/petersagan"/>
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/relativePilihProfil"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nama_added_profile_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Peter Sagan"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/white"/>
+
+                <TextView
+                    android:id="@+id/sekolah_added_profile_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:layout_marginTop="5sp"
+                    android:textColor="@android:color/white"
+                    android:text="XI RPL A / SMKN 4 Malang"/>
+
+            </LinearLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/pickArrowProfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_action_down"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1066589565693",
+    "firebase_url": "https://sim-s-3622b.firebaseio.com",
+    "project_id": "sim-s-3622b",
+    "storage_bucket": "sim-s-3622b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066589565693:android:30a10eb8d80e0e69",
+        "android_client_info": {
+          "package_name": "com.soerdev.sims"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066589565693-quutuvafiaur7jbe9n29t7tv96helvo0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soerdev.sims",
+            "certificate_hash": "96f701e6614b596c9a53321019c1e24b58aecf3e"
+          }
+        },
+        {
+          "client_id": "1066589565693-jv58snj6bn45uq76cl7j7n07d9gvescb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhBFjYlrNyI7hZsMvryPWdY5fS8XvWsdc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066589565693-jv58snj6bn45uq76cl7j7n07d9gvescb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

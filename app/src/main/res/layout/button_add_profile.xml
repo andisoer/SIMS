@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button
+    android:layout_centerInParent="true"
+    android:layout_centerHorizontal="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btntambahProfile"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:text="Tambah Profil"
+    android:textAllCaps="false"
+    android:textSize="15sp"
+    android:drawableRight="@drawable/ic_action_addgrey"
+    android:drawableEnd="@drawable/ic_action_addgrey"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:paddingLeft="15dp"
+    android:paddingStart="15dp"
+    android:paddingRight="10dp"
+    android:paddingEnd="10dp" >
+
+</Button>
