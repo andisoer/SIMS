@@ -1,7 +1,9 @@
 package com.soerdev.sims;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -62,6 +64,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private String nama_siswa_header, nama_sekolah_header, uid_profile_added;
 
+    private String TAG_ID = "id";
+    private String TAG_USERNAME = "username";
+
+    SharedPreferences sharedPreferences;
+
     private boolean pickProfileshow = false;
 
     @Override
@@ -76,6 +83,13 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.activity_home);
 
         navigationView = findViewById(R.id.navigasi_drawerhome);
+
+        sharedPreferences = getSharedPreferences(LoginActivity.my_shared_preferences, Context.MODE_PRIVATE);
+
+        varUserUidNow = getIntent().getStringExtra(TAG_ID);
+        varUserNameNow = getIntent().getStringExtra(TAG_USERNAME);
+
+        Toast.makeText(getApplicationContext(), "Selamat Datang " + varUserNameNow, Toast.LENGTH_SHORT).show();
 
         nama_siswa_dashboard = (TextView)findViewById(R.id.nama_siswa_dashboard);
         nama_sekolah_dashboard = (TextView)findViewById(R.id.nama_sekolah_dashboard);
@@ -285,7 +299,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void getUserName() {
         mUserReference = FirebaseDatabase.getInstance().getReference(Constants.USER_LOC);
-        varUserUidNow = mAuth.getCurrentUser().getUid();
+
+        /*varUserUidNow = mAuth.getCurrentUser().getUid();
 
         mUserReference.child(varUserUidNow).addValueEventListener(new ValueEventListener() {
             @Override
@@ -299,7 +314,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     private void showDialog() {
@@ -309,7 +324,11 @@ public class HomeActivity extends AppCompatActivity {
                 .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mAuth.signOut();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(LoginActivity.session_status, false);
+                        editor.putString(TAG_ID, null);
+                        editor.putString(TAG_USERNAME, null);
+                        editor.commit();
                         finish();
                     }
                 })

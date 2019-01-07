@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,6 +59,8 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
     Uri Fileurl, gmmIntentUri;
     Bitmap bitmap, decoded;
     LocationManager locationManager;
+    SharedPreferences sharedPreferences;
+
     int success;
     int REQUEST_CAMERA = 0;
     int bitmap_size = 60;
@@ -70,15 +73,17 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
     private String UPLOAD_URL = "https://backendservice.000webhostapp.com/backSIMS/upload_pict.php";
 
+    private String id, username;
+
     private static String TAG_SUCCESS = "success";
     private static String TAG_MESSAGE = "message";
 
+    private String KEY_ID = "id";
     private String KEY_IMAGE = "image";
-    private String KEY_NAMA = "nama";
+    private String KEY_NAMA = "username";
     private String KEY_KOORDINAT = "koordinat";
 
     String tag_json_obj = "json_obj_req";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,11 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
         enabledBTN = findViewById(R.id.enabledCardView);
         disableBTN = findViewById(R.id.disabledCardView);
+
+        sharedPreferences = getSharedPreferences(LoginActivity.my_shared_preferences, Context.MODE_PRIVATE);
+
+        id = getIntent().getStringExtra(KEY_ID);
+        username = getIntent().getStringExtra(KEY_NAMA);
 
         checkGambar();
 
@@ -166,17 +176,6 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
                 lokasi1.setText(""+latti);
                 lokasi2.setText(""+longi);
-                /*
-                lihatpeta.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        gmmIntentUri = Uri.parse("geo:"+latti+","+longi);
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
-                    }
-                });
-                */
             }
             else {
                 lokasi2.setText("Nyalakan GPS Anda !");
@@ -262,7 +261,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
                 Map<String, String> params = new HashMap<String, String>();
 
                 params.put(KEY_IMAGE, getStringImage(decoded));
-                params.put(KEY_NAMA, "adqdqd");
+                params.put(KEY_NAMA, username);
                 params.put(KEY_KOORDINAT, koordinat);
                 Log.e(TAG, "" + params);
                 return params;
