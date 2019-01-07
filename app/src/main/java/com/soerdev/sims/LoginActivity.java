@@ -186,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putBoolean(session_status, true);
                         editor.putString(TAG_ID, id);
                         editor.putString(TAG_USERNAME, varEmail); //ganti dengan username
-                        editor.commit();
+                        editor.apply();
 
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra(TAG_ID, id);

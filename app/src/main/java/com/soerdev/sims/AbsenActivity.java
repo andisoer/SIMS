@@ -73,7 +73,8 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
     private String UPLOAD_URL = "https://backendservice.000webhostapp.com/backSIMS/upload_pict.php";
 
-    private String id, username;
+    private String username;
+    private int id;
 
     private static String TAG_SUCCESS = "success";
     private static String TAG_MESSAGE = "message";
@@ -110,8 +111,8 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
         sharedPreferences = getSharedPreferences(LoginActivity.my_shared_preferences, Context.MODE_PRIVATE);
 
-        id = getIntent().getStringExtra(KEY_ID);
-        username = getIntent().getStringExtra(KEY_NAMA);
+        id = (sharedPreferences.getInt(KEY_ID, 0));
+        username = (sharedPreferences.getString(KEY_NAMA, ""));
 
         checkGambar();
 
