@@ -1,6 +1,7 @@
 package com.soerdev.sims;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -39,8 +41,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AbsenActivity extends AppCompatActivity implements LocationListener {
@@ -49,11 +55,11 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
     CardView submitAbsen, pilihGambar, lihatpeta;
     RelativeLayout enabledBTN, disableBTN;
     TextView lokasi1, lokasi2;
-    Uri url, gmmIntentUri;
+    Uri Fileurl, gmmIntentUri;
     Bitmap bitmap, decoded;
     LocationManager locationManager;
     int success;
-    int PICK_IMAGE_REQUEST;
+    int REQUEST_CAMERA = 0;
     int bitmap_size = 60;
 
     boolean clickableUpload = false;
@@ -109,81 +115,38 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         pilihGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gambar();
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Fileurl = getOutPutMediaFileURI();
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Fileurl);
+                startActivityForResult(intent, REQUEST_CAMERA);
+
             }
         });
 
         lihatpeta = (CardView) findViewById(R.id.ambilLokasi);
 
-       /* locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if (location != null){
-
-            lokasi1.setText("Lokasi Ditemukan");
-            //onLocationChanged(location);
-        }else {
-            lokasi1.setText("Pastikan jaringan anda sudahc \n cepat dan stabil");
-                                                                                                        ProgressDialog dialog = ProgressDialog.show(this, null, "Unggah Gambar . . .", false, false);
-
-            dialog.show();
-
-            for (int a =1; a >= 0.; a++)
-            {
-
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Location locat = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                if (locat != null){
-                    a = 0;
-                    dialog.dismiss();
-                    onLocationChanged(location);
-                }else {
-                    a = 1;
-                }
-
-
-            }
-
-
-        }
-
-*/
-
-
     locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         getLocation();
     }
 
+    private Uri getOutPutMediaFileURI() {
+        return Uri.fromFile(getOutPutMediaFile());
+    }
 
+    private static File getOutPutMediaFile(){
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "DeKa");
+        if(!mediaStorageDir.exists()){
+            if(!mediaStorageDir.mkdirs()){
+                Log.e("Monitoring", "Oops, Failed Create Monitoring Directory");
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_DeKa_" + timeStamp + ".jpg");
+
+        return mediaFile;
+    }
 
     private void getLocation (){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -196,7 +159,6 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
             ProgressDialog dialog = ProgressDialog.show(this, null, "Lihat Lokasi . . .", false, false);
 
-
             if (location !=null){
                 dialog.dismiss();
                 latti = location.getLatitude();
@@ -204,34 +166,25 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
                 lokasi1.setText(""+latti);
                 lokasi2.setText(""+longi);
-
-
+                /*
                 lihatpeta.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                       /*Uri Koordinat = Uri.parse("geo:"+latti+","+longi);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Koordinat);
-                        intent.setPackage("com.google.android.app.maps");
-                        startActivity(intent);*/
-
                         gmmIntentUri = Uri.parse("geo:"+latti+","+longi);
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                         mapIntent.setPackage("com.google.android.apps.maps");
                         startActivity(mapIntent);
                     }
                 });
+                */
             }
             else {
                 lokasi2.setText("Nyalakan GPS Anda !");
                 lokasi1.setText("");
 
                 loc();
-
             }
-
         }
-
     }
 
     private void loc(){
@@ -326,34 +279,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         return encodedImages;
     }
 
-    /*private  void  gambar(){
-
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAutoZoomEnabled(true)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .start(AbsenActivity.this);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                Uri uri = result.getUri();
-                url = uri;
-                img_absen.setImageURI(uri);
-            }else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-
-                if(BuildConfig.DEBUG) error.printStackTrace();
-            }
-        }
-    }*/
-
-   private  void  gambar(){
+    private  void  gambar(){
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAutoZoomEnabled(true)
@@ -363,22 +289,17 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                Uri uri = result.getUri();
+        Log.e("onActivityResult", "requestCode" +requestCode+ ", resultCode" + requestCode);
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == REQUEST_CAMERA){
                 try{
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    Log.e("CAMERA", Fileurl.getPath());
+
+                    bitmap = BitmapFactory.decodeFile(Fileurl.getPath());
                     setToImageView(getResizedBitmap(bitmap, 512));
-                }catch (IOException e){
+                }catch (Exception e){
                     e.printStackTrace();
                 }
-
-            }else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-
-                if(BuildConfig.DEBUG) error.printStackTrace();
             }
         }
     }
