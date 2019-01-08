@@ -180,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (success == 1) {
                         Log.e("Registration Success !", jsonObject.toString());
 
-                        Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_SHORT).show();
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(session_status, true);

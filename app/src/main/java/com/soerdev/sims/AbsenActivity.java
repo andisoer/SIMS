@@ -2,8 +2,10 @@ package com.soerdev.sims;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -79,10 +82,13 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
     private static String TAG_SUCCESS = "success";
     private static String TAG_MESSAGE = "message";
 
+    private String deviceID;
+
     private String KEY_ID = "id";
     private String KEY_IMAGE = "image";
     private String KEY_NAMA = "username";
     private String KEY_KOORDINAT = "koordinat";
+    private String KEY_DEVICE_ID = "id_device";
 
     String tag_json_obj = "json_obj_req";
 
@@ -114,7 +120,10 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         id = (sharedPreferences.getInt(KEY_ID, 0));
         username = (sharedPreferences.getString(KEY_NAMA, ""));
 
+        deviceID  = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+
         checkGambar();
+        //checkGPSisOnOff();
 
         submitAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,14 +139,44 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
                 Fileurl = getOutPutMediaFileURI();
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Fileurl);
                 startActivityForResult(intent, REQUEST_CAMERA);
+                locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                getLocation();
 
             }
         });
 
         lihatpeta = (CardView) findViewById(R.id.ambilLokasi);
 
-    locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        getLocation();
+    }
+
+    private void checkGPSisOnOff() {
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            enabledGPS();
+        }
+    }
+
+    private void enabledGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("GPS anda non - aktif, apakah anda ingin meng - aktifkanya ?")
+                .setCancelable(false)
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        finish();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private Uri getOutPutMediaFileURI() {
@@ -214,7 +253,6 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         else{
             submitAbsen.setEnabled(false);
             submitAbsen.setClickable(false);
-            // submitAbsen.setElevation(0); //
             clickableUpload = false;
             enabledBTN.setVisibility(View.INVISIBLE);
             disableBTN.setVisibility(View.VISIBLE);
@@ -264,6 +302,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
                 params.put(KEY_IMAGE, getStringImage(decoded));
                 params.put(KEY_NAMA, username);
                 params.put(KEY_KOORDINAT, koordinat);
+                params.put(KEY_DEVICE_ID, deviceID);
                 Log.e(TAG, "" + params);
                 return params;
             }
@@ -277,14 +316,6 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         byte[] imageBytes = baos.toByteArray();
         String encodedImages = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImages;
-    }
-
-    private void gambar(){
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAutoZoomEnabled(true)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .start(AbsenActivity.this);
     }
 
     @Override
@@ -337,6 +368,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         lokasi1.setText(""+lantitude);
         lokasi2.setText(""+longitude);
 
+        /*
         lihatpeta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -347,6 +379,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
                 startActivity(mapIntent);
             }
         });
+        */
     }
 
     @Override

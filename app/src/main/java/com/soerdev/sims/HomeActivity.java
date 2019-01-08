@@ -53,7 +53,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseRecyclerAdapter firebaseRecyclerAdapter;
 
-    private String varUserNameNow, varUserUidNow;
+    private String varUserNameNow;
+    private int varUserUidNow;
 
     private RelativeLayout relativeLayoutPilihProfil;
     private LinearLayout listPilihProfil;
@@ -86,8 +87,8 @@ public class HomeActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(LoginActivity.my_shared_preferences, Context.MODE_PRIVATE);
 
-        varUserUidNow = getIntent().getStringExtra(TAG_ID);
-        varUserNameNow = getIntent().getStringExtra(TAG_USERNAME);
+        varUserUidNow = (sharedPreferences.getInt(TAG_ID, 0));
+        varUserNameNow = (sharedPreferences.getString(TAG_USERNAME, ""));
 
         Toast.makeText(getApplicationContext(), "Selamat Datang " + varUserNameNow, Toast.LENGTH_SHORT).show();
 
@@ -122,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
         rvPilihProfile.setLayoutManager(linearLayoutManager);
 
         animasi();
-        getUserName();
+        //getUserName();
         tampilData();
 
         relativeLayoutPilihProfil.setOnClickListener(new View.OnClickListener() {
@@ -296,6 +297,8 @@ public class HomeActivity extends AppCompatActivity {
             pickProfileshow = false;
         }
     }
+
+
 
     private void getUserName() {
         mUserReference = FirebaseDatabase.getInstance().getReference(Constants.USER_LOC);
