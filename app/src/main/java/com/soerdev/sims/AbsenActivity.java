@@ -123,7 +123,7 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
         deviceID  = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         checkGambar();
-        //checkGPSisOnOff();
+        checkGPSisOnOff();
 
         submitAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,9 +150,9 @@ public class AbsenActivity extends AppCompatActivity implements LocationListener
     }
 
     private void checkGPSisOnOff() {
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager1 = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if(!locationManager1.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             enabledGPS();
         }
     }
